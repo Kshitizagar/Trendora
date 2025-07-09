@@ -1,59 +1,122 @@
-
-
-/* .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #232f3e;
-  padding: 2px 20px;
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  height: 50px;
-} */
-
+/* HEADER CONTAINER */
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #232f3e !important; /* Force apply */
-  padding: 2px 20px;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: #131921;
   color: white;
+  padding: 12px 16px;
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 50px;
-  transition: background-color 0.2s ease;
+  gap: 10px;
 }
 
+/* TOP BAR: LOGO + VISIT COUNT */
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* LOGO */
+/* .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #ff9900;
+  cursor: pointer;
+} */
 
 .logo {
-  font-size: 1.5rem;
+  flex-shrink: 0; /* prevent shrinking */
 }
+
+
+/* VISIT COUNTER */
+.visit-counter {
+  font-size: 13px;
+  color: #ccc;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+
+/* NAVIGATION */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* NAV BUTTONS */
+.nav-link {
+  background: #232f3e;
+  border: 1px solid #3a4553;
+  padding: 6px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .nav-link {
+    padding: 6px 16px; /* 👈 larger padding for tablets and desktops */
+    margin-left: 12px;
+  }
+}
+
+
+.nav-link:hover {
+  background: #37475a;
+  color: #ff9900;
+}
+
+/* SEARCH BOX */
+/* .search-box {
+  position: relative;
+  width: 82%;
+  margin-top: 8px;
+} */
 
 .search-box {
   position: relative;
-  width: 300px;
+  width: 82%;
+  margin: 0px; /* top auto bottom auto => centers horizontally */
 }
 
 .search-box input {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px 10px 36px;
   border-radius: 4px;
   border: none;
   font-size: 14px;
+  outline: none;
 }
 
+.search-box .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #555;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* SUGGESTIONS */
 .suggestions {
   list-style: none;
   position: absolute;
-  top: 36px;
+  top: 40px;
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #ddd;
-  border-top: none;
+  border: 1px solid #ccc;
   max-height: 200px;
   overflow-y: auto;
   z-index: 10;
@@ -67,53 +130,57 @@
 }
 
 .suggestions li:hover {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 
+/* RESPONSIVE LAYOUT */
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 12px 24px;
+  }
 
-.search-box {
-  position: relative;
-  width: 300px;
+  .header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  overflow-x: auto; /* scroll if overflow */
+  gap: 10px;
 }
 
-.search-box .search-icon {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  color: #888;
-  font-size: 14px;
-  pointer-events: none;
+.scroll-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
 }
 
-.search-box input {
-  width: 100%;
-  padding: 8px 12px 8px 32px; /* left padding to make room for icon */
-  border-radius: 4px;
-  border: none;
-  font-size: 14px;
+.scroll-nav::-webkit-scrollbar {
+  display: none; /* Chrome */
 }
 
-/* .nav-link {
-  margin-left: 15px;
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-} */
+  nav {
+    gap: 16px;
+    margin-top: 0;
+  }
 
-.nav-link {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-  text-decoration: underline; /* or whatever your nav uses */
-  margin-left: 15px;
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
+  .search-box {
+    max-width: 400px;
+    margin-top: 0;
+    margin-left: 20px;
+    flex: 1;
+  }
+
+  .visit-counter {
+    margin-left: auto;
+    font-size: 14px;
+    color: #bbb;
+  }
 }
-
-.nav-link:hover {
-  text-decoration: underline;
-}    
