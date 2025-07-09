@@ -1,139 +1,122 @@
-body {
-  background-color: #f0f8ff; /* or your preferred color */
-}
 
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import Header from './components/Header';
+import Offers from './components/Offers';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MensClothing from './components/MensClothing';
+import WomensClothing from './components/WomensClothing';
+import { v4 as uuidv4 } from "uuid";
 
-/* Container */
-.container {
-  padding: 16px;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
+function App() {
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
-/* Header */
-h1 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-}
+  // Fetch product data from backend
+  // useEffect(() => {
+  //   fetch('http://localhost:5000/api/products')
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setProducts(data);
+  //       setFilteredProducts(data); // Show all by default
+  //     })
+  //     .catch(err => console.error("Error fetching products:", err));
+  // }, []);
+  useEffect(() => {
+    fetch('https://appbackend-qmsw.onrender.com/api/products')
+      .then(res => res.json())
+      .then(data => {
+        setProducts(data);
+        setFilteredProducts(data); // Show all by default
+      })
+      .catch(err => console.error("Error fetching products:", err));
+  }, []);
 
-/* Product Grid */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
+  useEffect(() => {
+  // Send total visit every page load
+  fetch("https://appbackend-qmsw.onrender.com/api/visit", {
+    method: "POST"
+  });
 
-/* Each Product Box */
-.product-box {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-box:hover {
-  transform: translateY(-3px);
-  border-color: #007bff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-}
-
-/* Product Image */
-.product-image {
-  width: 100%;
-  height: 130px;
-  object-fit: contain;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  background-color: #f0f8ff; /* Light bluish background f0f8ff */
-  /* background-color: #f0f8ff; */
-  border: 1px solid #ccc;     /* Subtle border */
-  padding: 0px;               /* Space between image and border */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Optional subtle shadow */
-}
-
-
-/* Product Info */
-.product-box h3 {
-  margin: 8px 0 4px;
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.product-box p {
-  margin: 2px 0;
-  font-size: 13px;
-  color: #333;
-}
-
-/* Buy Now Button */
-.buy-button {
-  margin-top: 8px;
-  padding: 8px;
-  font-size: 13px;
-  width: 100%;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  font-weight: 600;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.buy-button:hover {
-  background-color: #0056b3;
-}
-
-/* Responsive Tweaks */
-@media (max-width: 768px) {
-  .container {
-    padding: 12px;
+  // Unique visitor tracking using localStorage
+  let visitorId = localStorage.getItem("visitor_id");
+  if (!visitorId) {
+    visitorId = uuidv4();
+    localStorage.setItem("visitor_id", visitorId);
   }
 
-  h1 {
-    font-size: 1.3rem;
-  }
+  fetch("https://appbackend-qmsw.onrender.com/api/uniqueVisit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ visitorId })
+  });
+}, []);
 
-  .product-image {
-    height: 120px;
-  }
+
+  // 🔍 Handle search filtering
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm || typeof searchTerm !== 'string' || !searchTerm.trim()) {
+      setFilteredProducts(products); // Reset to all if input is empty
+      return;
+    }
+
+    const term = searchTerm.toLowerCase();
+
+    const matched = products.filter(p =>
+      p.name?.toLowerCase().includes(term)
+    );
+
+    const unmatched = products.filter(p =>
+      !p.name?.toLowerCase().includes(term)
+    );
+
+    setFilteredProducts([...matched, ...unmatched]); // Match first
+  };
+
+  return (
+    <Router>
+      <Header products={products} onSearch={handleSearch} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="container">
+              {/* <h1>Product Catalog</h1> */}
+              <div className="product-grid">
+                {filteredProducts.map((product, index) => (
+                  <div className="product-box" key={product._id}>
+                    <div className="id-category">
+                      <p><strong>ID:</strong> {index + 1}</p>
+                      <p>{product.category}</p>
+                    </div>
+                    <img
+                      src={product.image_link}
+                      alt={product.name}
+                      className="product-image"
+                    />
+                    <p>{product.description.split(" ").slice(0, 7).join(" ")}...</p>
+                    <p>Price: ₹{product.price}</p>
+                    <button
+                      className="buy-button"
+                      onClick={() => window.open(product.product_link, '_blank')}
+                    >
+                      Buy Now
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          }
+        />
+        <Route
+          path="/offers"
+          element={<Offers products={products} />}
+        />
+        <Route path="/mens" element={<MensClothing products={products} />} />
+        <Route path="/womens" element={<WomensClothing products={products} />} />
+      </Routes>
+    </Router>
+  );
 }
 
-/* @media (max-width: 480px) {
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .product-image {
-    height: 110px;
-  }
-} */
-
-@media (max-width: 480px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr); /* 👈 show 2 products per row */
-    gap: 12px;
-  }
-
-  .product-image {
-    height: 100px;
-  }
-
-  h1 {
-    font-size: 1.2rem;
-  }
-}
-
-.id-category {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 14px;
-  margin-bottom: 8px;
-}
+export default App;
