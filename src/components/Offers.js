@@ -60,8 +60,8 @@ function Offers({ products }) {
               <div className="product-box" key={product._id}>
                 {/* <div className="id-category">
                   <p><strong>ID:</strong> {index + 1}</p>
-                  <p>{product.category}</p> */}
-                </div>
+                  <p>{product.category}</p>
+                </div> */}
                 <img src={product.image_link} alt={product.name} className="product-image" />
                 <p>{product.description.split(" ").slice(0, 7).join(" ")}...</p>
                 {/* <p>Price: ₹{product.price}</p> */}
