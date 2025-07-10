@@ -19,7 +19,7 @@ function Header({ products, onSearch }) {
 
   // Fetch visit count from backend
   useEffect(() => {
-    fetch('http://localhost:5001/api/stats') // 👈 Use your backend URL
+    fetch('https://appbackend-qmsw.onrender.com/api/stats') // 👈 https://appbackend-qmsw.onrender.com/  Use your backend URL
       .then(res => res.json())
       .then(data => {
         setVisitCount(data.totalVisits || 0);
