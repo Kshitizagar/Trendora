@@ -55,7 +55,7 @@ function Header({ products, onSearch }) {
   return (
     <header className="header">
       <div className="header-top">
-        <h2 className="logo" onClick={() => navigate('/')}>MyShop</h2>
+        <h2 className="logo" onClick={() => navigate('/')}>King Deals</h2>
         <nav className="scroll-nav">
           <button className="nav-link" onClick={() => navigate('/')}>Home</button>
           <button className="nav-link" onClick={() => navigate('/offers')}>Offers</button>
