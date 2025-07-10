@@ -98,7 +98,8 @@ function App() {
                       className="product-image"
                     />
                     <p>{product.description.split(" ").slice(0, 7).join(" ")}...</p>
-                    <p>Price: ₹{product.price}</p>     
+                    {/* <p>Price: ₹{product.price}</p> */}
+                    <p style={{ fontSize: "1em", fontWeight: "600", margin: "0" }}>₹{product.price}</p>
                     <button
                       className="buy-button"
                       onClick={() => window.open(product.product_link, '_blank')}
