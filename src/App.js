@@ -85,10 +85,13 @@ function App() {
               <div className="product-grid">
                 {filteredProducts.map((product, index) => (
                   <div className="product-box" key={product._id}>
-                    // <div className="id-category">
-                    //   <p><strong>ID:</strong> {index + 1}</p>
-                    //   <p>{product.category}</p>
-                    // </div>
+                    {/* <div className="id-category">
+                      <p><strong>ID:</strong> {index + 1}</p>
+                      <p>{product.category}</p>
+                     </div> */}
+                  
+
+            
                     <img
                       src={product.image_link}
                       alt={product.name}
